@@ -1,0 +1,7 @@
+*.o
+obj/
+build/
+tags
+
+compile_flags.txt
+.cache/
