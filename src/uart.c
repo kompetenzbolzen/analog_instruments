@@ -73,3 +73,9 @@ uint8_t uart_getchar(char *_c) {
 
 	return 0;
 }
+
+void uart_putstring(char *_s) {
+	do {
+		uart_putchar(*_s);
+	} while(*(_s++));
+}

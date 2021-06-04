@@ -5,7 +5,8 @@
  */
 
 /*
- * Interrupt controlled UART
+ * Interrupt controlled UART with
+ * ringbuffers to TX and RX
  */
 
 #ifndef _UART_H_
@@ -17,7 +18,7 @@
 #include <string.h>
 
 #ifndef BAUD
-#warning BAUD "BAUD not defined. Dafaulting to 9600"
+#warning "BAUD not defined. Dafaulting to 9600"
 #define BAUD 9600
 #endif
 
@@ -32,5 +33,7 @@ void uart_init();
 uint8_t uart_putchar(char _c);
 
 uint8_t uart_getchar(char *_c);
+
+void uart_putstring(char *_s);
 
 #endif

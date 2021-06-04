@@ -1,8 +1,15 @@
+/*
+ * src/main.c
+ * (c) 2021 Jonas Gunz <himself@jonasgunz.de>
+ * License: All rights reserved.
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
 
 #include "uart.h"
+#include "cmd.h"
 
 uint8_t t0_ovf_cnt = 0;
 
@@ -48,16 +55,20 @@ int main(void) {
 
 	/* Uart */
 	uart_init();
+
+	cmd_init();
 	
 	/* Go! */
 	sei();
+
+	uart_putstring("START\r\n");
 
 	while(1){
 		if( uart_getchar(&c) )
 			continue;
 
 		uart_putchar(c);
-		pb0_thresh = c;
+		cmd_tick(c);
 	}
 
 	return 0;
