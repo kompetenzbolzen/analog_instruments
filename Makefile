@@ -1,9 +1,18 @@
 MCU             = atmega8
-CPUFREQ         = 160000000
 PROGRAMMER      = dragon_isp
 
+CPUFREQ         = 8000000 #8MHz
+BAUD            = 9600
+
+# https://www.engbedded.com/fusecalc/
+# Int. RC Osc. 8MHz
+# No WD
+# No BOD
+LFUSE           = 0xc4
+HFUSE           = 0xd9
+
 CC              = avr-gcc
-CFLAGS          = -std=c89 -Wall -mmcu=$(MCU) -DF_CPU=$(CPUFREQ)
+CFLAGS          = -std=c89 -Wall -mmcu=$(MCU) -DF_CPU=$(CPUFREQ) -DBAUD=$(BAUD)
 LDFLAGS         = -mmcu=$(MCU)
 BUILDDIR        = build
 SOURCEDIR       = src
@@ -19,6 +28,7 @@ build: dir $(OBJ)
 	@echo LD $(OBJ)
 	@$(CC) $(CFLAGS) -o $(BUILDDIR)/$(OUTPUT) $(OBJ) $(LDFLAGS)
 	@avr-objcopy -O ihex $(BUILDDIR)/$(OUTPUT) $(BUILDDIR)/$(OUTPUT).hex
+	@avr-size --mcu=$(MCU) --format=avr $(BUILDDIR)/$(OUTPUT)
 
 debug: -D _DEBUG
 debug: build;
@@ -41,7 +51,10 @@ clean:
 all: clean build
 
 flash: build
-	@avrdude -p $(MCU) -c $(PROGRAMMER) -U flash:w:$(BUILDDIR)/$(OUTPUT).hex:i
+	@sudo avrdude -p $(MCU) -c $(PROGRAMMER) -U flash:w:$(BUILDDIR)/$(OUTPUT).hex:i
+
+fuse:
+	@sudo avrdude -p $(MCU) -c $(PROGRAMMER) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m
 
 devsetup:
 	@echo "--target=avr -isystem /usr/avr/include/ $(CFLAGS)" | tr ' ' '\n' > compile_flags.txt
