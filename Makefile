@@ -1,4 +1,5 @@
 MCU             = atmega8
+# only for avrdude
 PROGRAMMER      = dragon_isp
 
 CPUFREQ         = 8000000 #8MHz
@@ -53,8 +54,17 @@ all: clean build
 flash: build
 	@sudo avrdude -p $(MCU) -c $(PROGRAMMER) -U flash:w:$(BUILDDIR)/$(OUTPUT).hex:i
 
+flash-minipro: build
+	@sudo minipro -p $(MCU) -w $(BUILDDIR)/$(OUTPUT).hex -f ihex
+
 fuse:
 	@sudo avrdude -p $(MCU) -c $(PROGRAMMER) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m
+
+fuse-minipro: dir
+	@echo fuses_lo = $(LFUSE) >  $(BUILDDIR)/fuses.conf
+	@echo fuses_hi = $(HFUSE) >> $(BUILDDIR)/fuses.conf
+	@echo lock_byte= 0xff     >> $(BUILDDIR)/fuses.conf
+	@sudo minipro -p $(MCU) -c config -w $(BUILDDIR)/fuses.conf
 
 devsetup:
 	@echo "--target=avr -isystem /usr/avr/include/ $(CFLAGS)" | tr ' ' '\n' > compile_flags.txt
