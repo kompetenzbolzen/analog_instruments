@@ -1,10 +1,8 @@
 #!/bin/bash
 
-#
 # system_usage.sh
 # (c) 2022 Jonas Gunz <himself@jonasgunz.de>
-# License: All rights reserved.
-#
+# License: MIT
 
 # USAGE:
 # ./system_usage.sh [TTY [BAUD]]
@@ -17,6 +15,16 @@ readonly NUMCPU="$(nproc --all)" #"$(grep -c ^processor /proc/cpuinfo)"
 readonly PWM_CPU=0
 readonly PWM_RAM=1
 readonly PWM_TMP=2
+
+readonly DEPENDENCIES=( stty nproc sensors )
+for dep in "${DEPENDENCIES[@]}"; do
+	if ! which "$dep" > /dev/null 2>&1; then
+		echo "Command '$dep' missing."
+		FAILED=1
+	fi
+
+	test -n "$FAILED" && exit 1
+done
 
 echo "Trying to set $TTY to $BAUD"
 stty -F "$TTY" "$BAUD" -echo || exit 1
