@@ -11,11 +11,14 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 
-extern uint8_t t0_ovf_cnt;
-extern uint8_t pb0_thresh;
+#define PWM_PINS 3
+#define PWM_DDR DDRB
+#define PWM_PORT PORTB
 
 void pwm_init();
 
 void pwm_set_pin(uint8_t _pin, uint8_t _duty);
+
+void pwm_fade_pin(uint8_t _pin, uint8_t _duty);
 
 #endif /* _PWM_H_ */

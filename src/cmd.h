@@ -13,7 +13,7 @@
 #include "pwm.h"
 #include "helpers.h"
 
-#define _CMD_CNT	2
+#define _CMD_CNT	3
 #define _CMD_MAX_ARGC	4
 
 #define _ERR_CMD	1
@@ -30,6 +30,14 @@ void cmd_tick(char _c);
  * 1-2: Dutycycle in HEX (00-FF)
  */
 void cmd_set_pwm(uint8_t _argv[]);
+
+/**
+ * argc=3
+ *
+ * 0: Pin Num
+ * 1-2: Dutycycle in HEX (00-FF)
+ */
+void cmd_fade_pwm(uint8_t _argv[]);
 
 /**
  * argc=1

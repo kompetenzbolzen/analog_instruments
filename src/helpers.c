@@ -7,8 +7,8 @@
 #include "helpers.h"
 
 uint8_t hex_to_byte(char c[]) {
-	uint8_t ret = hex_to_halfbyte(c[0]);
-	ret += 16 * hex_to_halfbyte(c[1]);
+	uint8_t ret = hex_to_halfbyte(c[1]);
+	ret += 16 * hex_to_halfbyte(c[0]);
 
 	return ret;
 }

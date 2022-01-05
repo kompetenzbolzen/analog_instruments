@@ -20,7 +20,8 @@ const struct {
 	uint8_t argc;
 } cmd[_CMD_CNT] = {
 	{0,cmd_err,0},
-	{'p',cmd_set_pwm,3}
+	{'p',cmd_set_pwm,3},
+	{'f',cmd_fade_pwm,3}
 };
 
 void cmd_init() {
@@ -67,6 +68,9 @@ void cmd_tick(char _c) {
 	if (cmd_state.state >= _CMD_MAX_ARGC) {
 		cmd_state.cmd = 0;
 		cmd_state.argv[0] = _ERR_ARGC;
+
+		/* TODO this fixes reset on keysmashing. why? */
+		return;
 	}
 
 	cmd_state.argv[ (cmd_state.state++) - 1 ] = _c;
@@ -77,6 +81,13 @@ void cmd_set_pwm(uint8_t _argv[]) {
 	uint8_t pin = _argv[0] - 48;
 
 	pwm_set_pin(pin, duty);
+}
+
+void cmd_fade_pwm(uint8_t _argv[]) {
+	uint8_t duty = hex_to_byte((char*)&(_argv[1]));
+	uint8_t pin = _argv[0] - 48;
+
+	pwm_fade_pin(pin, duty);
 }
 
 void cmd_err( uint8_t _argv[] ) {
