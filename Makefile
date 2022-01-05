@@ -1,3 +1,7 @@
+# Makefile
+# (c) 2022 Jonas Gunz <himself@jonasgunz.de>
+# License: MIT
+
 MCU             = atmega8
 # only for avrdude
 PROGRAMMER      = dragon_isp

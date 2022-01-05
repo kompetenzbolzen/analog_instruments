@@ -1,7 +1,7 @@
 /*
  * src/main.c
  * (c) 2021 Jonas Gunz <himself@jonasgunz.de>
- * License: All rights reserved.
+ * License: MIT
  */
 
 #include <avr/io.h>

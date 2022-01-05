@@ -1,7 +1,7 @@
 /*
  * src/helpers.h
  * (c) 2022 Jonas Gunz <himself@jonasgunz.de>
- * License: All rights reserved.
+ * License: MIT
  */
 
 #ifndef _HELPERS_H_

@@ -1,7 +1,7 @@
 /*
  * src/pwm.c
  * (c) 2022 Jonas Gunz <himself@jonasgunz.de>
- * License: All rights reserved.
+ * License: MIT
  */
 
 #include "pwm.h"
