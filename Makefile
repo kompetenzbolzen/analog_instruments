@@ -3,7 +3,7 @@
 # License: MIT
 
 MCU             = atmega8
-# only for avrdude
+# Only used by avrdude
 PROGRAMMER      = dragon_isp
 
 CPUFREQ         = 8000000 #8MHz
@@ -33,6 +33,7 @@ build: dir $(OBJ)
 	@echo LD $(OBJ)
 	@$(CC) $(CFLAGS) -o $(BUILDDIR)/$(OUTPUT) $(OBJ) $(LDFLAGS)
 	@avr-objcopy -O ihex $(BUILDDIR)/$(OUTPUT) $(BUILDDIR)/$(OUTPUT).hex
+	@echo
 	@avr-size --mcu=$(MCU) --format=avr $(BUILDDIR)/$(OUTPUT)
 
 debug: -D _DEBUG
@@ -47,7 +48,7 @@ $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.c
 	@$(CC) -c $(CFLAGS) $< -o $@
 
 .PHONY: clean
-clean:	
+clean:
 	@echo RM $(OBJ)
 	@echo RM $(BUILDDIR)/$(OUTPUT)
 	@rm -df  $(OBJ)
@@ -72,9 +73,3 @@ fuse-minipro: dir
 
 devsetup:
 	@echo "--target=avr -isystem /usr/avr/include/ $(CFLAGS)" | tr ' ' '\n' > compile_flags.txt
-
-
-#--target=avr
-#tmarch=atmega8
-#-mmcu=atmega8
-#-I/usr/avr/include/
