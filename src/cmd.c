@@ -5,6 +5,8 @@
  */
 
 #include "cmd.h"
+#include "helpers.h"
+#include <stdint.h>
 
 struct {
 	uint8_t state;
@@ -18,7 +20,7 @@ const struct {
 	uint8_t argc;
 } cmd[_CMD_CNT] = {
 	{0,cmd_err,0},
-	{'p',cmd_set_pwm,2}
+	{'p',cmd_set_pwm,3}
 };
 
 void cmd_init() {
@@ -31,17 +33,21 @@ void cmd_tick(char _c) {
 
 	if(_c == '\r') {
 		/* if cmd is not cmd_err and argc do not match */
-		if( cmd_state.cmd && cmd[cmd_state.cmd].argc != cmd_state.state - 1 ) {
+		if( cmd_state.cmd && ( cmd[cmd_state.cmd].argc != cmd_state.state - 1 ) ) {
 			/* set cmd_err to _ERR_ARGC */
 			cmd_state.cmd = 0;
 			cmd_state.argv[0] = _ERR_ARGC;
 		}
 
 		(*cmd[cmd_state.cmd].fkt)(cmd_state.argv);
-		cmd_state.state = 0;
-		cmd_state.cmd   = 0;
+		cmd_state.state   = 0;
+		cmd_state.cmd     = 0;
+		cmd_state.argv[0] = 0;
 		return;
 	}
+
+	if(_c == '\n')
+		return;
 
 	if(!cmd_state.state) {
 		cmd_state.state = 1;
@@ -67,8 +73,10 @@ void cmd_tick(char _c) {
 }
 
 void cmd_set_pwm(uint8_t _argv[]) {
-	uart_putchar(_argv[0]);
-	uart_putchar(_argv[1]);
+	uint8_t duty = hex_to_byte((char*)&(_argv[1]));
+	uint8_t pin = _argv[0] - 48;
+
+	pwm_set_pin(pin, duty);
 }
 
 void cmd_err( uint8_t _argv[] ) {

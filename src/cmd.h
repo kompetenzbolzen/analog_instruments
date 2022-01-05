@@ -10,6 +10,8 @@
 #include <stdint.h>
 
 #include "uart.h"
+#include "pwm.h"
+#include "helpers.h"
 
 #define _CMD_CNT	2
 #define _CMD_MAX_ARGC	4
@@ -21,8 +23,19 @@ void cmd_init();
 
 void cmd_tick(char _c);
 
+/**
+ * argc=3
+ *
+ * 0: Pin Num
+ * 1-2: Dutycycle in HEX (00-FF)
+ */
 void cmd_set_pwm(uint8_t _argv[]);
 
+/**
+ * argc=1
+ *
+ * 0: Error type
+ */
 void cmd_err(uint8_t _argv[]);
 
 #endif
